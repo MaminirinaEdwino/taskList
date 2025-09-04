@@ -5,6 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
+	"github.com/gookit/color"
+	"github.com/olekukonko/tablewriter"
 )
 
 type Task struct {
@@ -80,9 +83,22 @@ func (tasks *TaskList) awaitTask(task int) {
 }
 
 func (tasks *TaskList) listtask() {
-	for i := range tasks.Tasks {
-		fmt.Printf("%d\t|%s\t|%s\t|%s\t|\n", tasks.Tasks[i].Id, tasks.Tasks[i].Name, tasks.Tasks[i].Description, tasks.Tasks[i].Status)
+	// for i := range tasks.Tasks {
+	// 	fmt.Printf("%d\t|%s\t|%s\t|%s\t|\n", tasks.Tasks[i].Id, tasks.Tasks[i].Name, tasks.Tasks[i].Description, tasks.Tasks[i].Status)
+	// }
+	data := [][]string{}
+	for _, v := range tasks.Tasks{
+		data = append(data, []string{strconv.Itoa(v.Id), color.Red.Render(v.Name), v.Description, v.Status})
 	}
+	table := tablewriter.NewWriter(os.Stdout)
+	// style := color.Yellow.Darken().Render()
+	// style("")
+	table.Header([]string{"ID", "Name", "Description", "Status"})
+	
+	for _, v := range data{
+		table.Append(v)
+	}
+	table.Render()
 }
 
 func (tasks *TaskList) writeToFile() {
@@ -105,7 +121,8 @@ func (tasks *TaskList) loadFromFile() {
 }
 
 func main() {
-	fmt.Println("Cli todoList vaovao")
+	// fmt.Println("Cli todoList vaovao")
+	color.FgGreen.Println("Todo List GO")
 	taskname := flag.String("taskname", "task", "this is the name of the string")
 	taskdescription := flag.String("taskdescription", "description", "the description of the task")
 	taskid := flag.Int("taskid", 1, "THe id a task")
@@ -132,7 +149,7 @@ func main() {
 		tasklist := TaskList{}
 		tasklist.loadFromFile()
 		if tasklist.doubleCheck(*taskname) {
-			fmt.Println("Task already exists")
+			color.Red.Println("Task already exists")
 			break
 		}
 		fmt.Println(*taskname)
