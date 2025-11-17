@@ -1,16 +1,3 @@
 {
-    "Tasks": [
-        {
-            "Id": 1,
-            "Name": "task1",
-            "Description": "description",
-            "Status": "en attente"
-        },
-        {
-            "Id": 2,
-            "Name": "task2",
-            "Description": "description",
-            "Status": "en attente"
-        }
-    ]
+    "Tasks": null
 }

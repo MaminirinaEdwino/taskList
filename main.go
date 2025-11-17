@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
+
 	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 )
@@ -28,7 +30,16 @@ func (tasks *TaskList) addTask(task Task) {
 	}
 	task.Status = "en attente"
 	tasks.Tasks = append(tasks.Tasks, task)
-	fmt.Printf("%d\t|%s\t|%s\t|%s\t|\n", task.Id, task.Name, task.Description, task.Status)
+	// fmt.Printf("%d\t|%s\t|%s\t|%s\t|\n", task.Id, task.Name, task.Description, task.Status)
+	data := [][]string{}
+	data = append(data, []string{strconv.Itoa(task.Id), task.Name, task.Description, task.Status})
+	table := tablewriter.NewWriter(os.Stdout)
+	table.Header([]string{"ID", "Name", "Description", "Status"})
+	for _, v := range data{
+		table.Append(v)
+	}
+	table.Render()
+	
 }
 
 func (tasks *TaskList) deleteTask(task int) {
@@ -109,13 +120,22 @@ func (tasks *TaskList) writeToFile() {
 	if len(tasks.Tasks) == 0 {
 		os.WriteFile("tasks.json", taks, 0644)
 	}
-	os.WriteFile("tasks.json", taks, 0644)
+	dir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+	os.WriteFile(fmt.Sprintf("%s/tasks.json", dir), taks, 0644)
 }
 
 func (tasks *TaskList) loadFromFile() {
-	jsonData, err := os.ReadFile("tasks.json")
+	dir, err := os.UserHomeDir()
 	if err != nil {
-		panic("teste")
+		log.Fatal(err)
+	}
+	jsonData, err := os.ReadFile(dir+"/tasks.json")
+	if err != nil {
+		tasklist := TaskList{}
+		tasklist.writeToFile()
 	}
 	json.Unmarshal(jsonData, &tasks)
 }
