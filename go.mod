@@ -1,4 +1,4 @@
-module github.com/MaminirinaEdwino/gotasklist
+module github.com/MaminirinaEdwino/taskList
 
 go 1.23.8
 
