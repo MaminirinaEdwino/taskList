@@ -67,13 +67,22 @@ func (tasks *TaskList) doubleCheck(taskname string) bool {
 }
 
 func statusChanger(tasks TaskList, task int, status string) {
+	data := [][]string{}
+	table := tablewriter.NewWriter(os.Stdout)
+	
 	for i := range tasks.Tasks {
 		if tasks.Tasks[i].Id == task {
 			tasks.Tasks[i].Status = status
-			fmt.Printf("%d\t|%s\t|%s\t|%s\t|\n", tasks.Tasks[i].Id, tasks.Tasks[i].Name, tasks.Tasks[i].Description, tasks.Tasks[i].Status)
+			data = append(data, []string{strconv.Itoa(tasks.Tasks[i].Id), tasks.Tasks[i].Name, tasks.Tasks[i].Description, tasks.Tasks[i].Status})
+			// fmt.Printf("%d\t|%s\t|%s\t|%s\t|\n", tasks.Tasks[i].Id, tasks.Tasks[i].Name, tasks.Tasks[i].Description, tasks.Tasks[i].Status)
 			break
 		}
 	}
+	table.Header([]string{"ID", "Name", "Description", "Status"})
+	for _, v := range data{
+		table.Append(v)
+	}
+	table.Render()
 }
 
 func (tasks *TaskList) startTask(task int) {
