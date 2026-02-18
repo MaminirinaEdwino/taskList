@@ -39,7 +39,6 @@ func (tasks *TaskList) addTask(task Task) {
 		table.Append(v)
 	}
 	table.Render()
-	
 }
 
 func (tasks *TaskList) deleteTask(task int) {
@@ -94,18 +93,12 @@ func (tasks *TaskList) awaitTask(task int) {
 }
 
 func (tasks *TaskList) listtask() {
-	// for i := range tasks.Tasks {
-	// 	fmt.Printf("%d\t|%s\t|%s\t|%s\t|\n", tasks.Tasks[i].Id, tasks.Tasks[i].Name, tasks.Tasks[i].Description, tasks.Tasks[i].Status)
-	// }
 	data := [][]string{}
 	for _, v := range tasks.Tasks{
 		data = append(data, []string{strconv.Itoa(v.Id), color.Red.Render(v.Name), v.Description, v.Status})
 	}
 	table := tablewriter.NewWriter(os.Stdout)
-	// style := color.Yellow.Darken().Render()
-	// style("")
 	table.Header([]string{"ID", "Name", "Description", "Status"})
-	
 	for _, v := range data{
 		table.Append(v)
 	}
