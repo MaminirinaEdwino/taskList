@@ -69,7 +69,7 @@ func (tasks *TaskList) doubleCheck(taskname string) bool {
 func statusChanger(tasks TaskList, task int, status string) {
 	data := [][]string{}
 	table := tablewriter.NewWriter(os.Stdout)
-	
+
 	for i := range tasks.Tasks {
 		if tasks.Tasks[i].Id == task {
 			tasks.Tasks[i].Status = status
